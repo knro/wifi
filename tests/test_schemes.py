@@ -55,16 +55,16 @@ class TestSchemes(TestCase):
         work, coffee, home, coffee2 = extract_schemes(NETWORK_INTERFACES_FILE)
 
         assert work.name == 'work'
-        assert work.options['wpa-ssid'] == 'workwifi'
+        assert work.options['wpa-ssid'] == ['workwifi']
 
         assert coffee.name == 'coffee'
-        assert coffee.options['wireless-essid'] == 'Coffee WiFi'
+        assert coffee.options['wireless-essid'] == ['Coffee WiFi']
 
     def test_str(self):
         scheme = self.Scheme('wlan0', 'test')
         assert str(scheme) == 'iface wlan0-test inet dhcp\n'
 
-        scheme = self.Scheme('wlan0', 'test', {
+        scheme = self.Scheme('wlan0', 'test', options={
             'wpa-ssid': 'workwifi',
         })
 
@@ -73,7 +73,7 @@ class TestSchemes(TestCase):
     def test_find(self):
         work = self.Scheme.find('wlan0', 'work')
 
-        assert work.options['wpa-ssid'] == 'workwifi'
+        assert work.options['wpa-ssid'] == ['workwifi']
 
     def test_delete(self):
         work = self.Scheme.find('wlan0', 'work')
@@ -109,8 +109,8 @@ class TestForCell(TestCase):
         scheme = Scheme.for_cell('wlan0', 'test', cell)
 
         self.assertEqual(scheme.options, {
-            'wireless-essid': 'SSID',
-            'wireless-channel': 'auto',
+            'wireless-essid': ['SSID'],
+            'wireless-channel': ['auto'],
         })
 
     def test_wep(self):
@@ -122,8 +122,8 @@ class TestForCell(TestCase):
         scheme = Scheme.for_cell('wlan0', 'test', cell, 'passkey')
 
         self.assertEqual(scheme.options, {
-            'wireless-essid': 'SSID',
-            'wireless-key': 'passkey',
+            'wireless-essid': ['SSID'],
+            'wireless-key': ['passkey'],
         })
 
     def test_wpa2(self):
@@ -135,9 +135,9 @@ class TestForCell(TestCase):
         scheme = Scheme.for_cell('wlan0', 'test', cell, b'passkey')
 
         self.assertEqual(scheme.options, {
-            'wpa-ssid': 'SSID',
-            'wpa-psk': 'ea1548d4e8850c8d94c5ef9ed6fe483981b64c1436952cb1bf80c08a68cdc763',
-            'wireless-channel': 'auto',
+            'wpa-ssid': ['SSID'],
+            'wpa-psk': ['ea1548d4e8850c8d94c5ef9ed6fe483981b64c1436952cb1bf80c08a68cdc763'],
+            'wireless-channel': ['auto'],
         })
 
     def test_wpa(self):
@@ -149,9 +149,9 @@ class TestForCell(TestCase):
         scheme = Scheme.for_cell('wlan0', 'test', cell, 'passkey')
 
         self.assertEqual(scheme.options, {
-            'wpa-ssid': 'SSID',
-            'wpa-psk': 'ea1548d4e8850c8d94c5ef9ed6fe483981b64c1436952cb1bf80c08a68cdc763',
-            'wireless-channel': 'auto',
+            'wpa-ssid': ['SSID'],
+            'wpa-psk': ['ea1548d4e8850c8d94c5ef9ed6fe483981b64c1436952cb1bf80c08a68cdc763'],
+            'wireless-channel': ['auto'],
         })
 
 
