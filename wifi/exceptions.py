@@ -4,3 +4,7 @@ class ConnectionError(Exception):
 
 class InterfaceError(Exception):
     pass
+
+
+class BindError(Exception):
+    pass
