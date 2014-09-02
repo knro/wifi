@@ -25,18 +25,6 @@ hw_mode=g
 auth_algs=3
 """
 
-HOSTAPD_OUTPUT_SUCCESS = """Configuration file: /etc/hostapd/conf.d/ssid_with_encryption.conf
-Failed to update rate sets in kernel module
-Using interface wlan0 with hwaddr 68:5d:43:df:72:44 and ssid 'SsidWithEncryption'
-"""
-
-HOSTAPD_OUTPUT_FAILURE = """Configuration file: /etc/hostapd/conf.d/ssid_with_encryption.conf
-rfkill: WLAN soft blocked
-Could not set interface mon.wlan0 flags: Operation not possible due to RF-kill
-nl80211: Failed to set interface wlan0 into AP mode
-nl80211 driver initialization failed.
-"""
-
 class TestHostapd(TestCase):
 
     def setUp(self):
@@ -129,14 +117,6 @@ class TestHostapd(TestCase):
         existing_hostapd = self.Hostapd.find('wlan0', 'ssid_without_encryption')
         self.assertIsNotNone(existing_hostapd)
         self.assertEquals(existing_hostapd.driver, 'madwifi')
-
-    def test_successful_activation(self):
-        hostapd = Hostapd('wlan0', 'test', 'Test', 3)
-        self.assertTrue(hostapd.parse_hostapd_output(HOSTAPD_OUTPUT_SUCCESS))
-
-    def test_failed_activation(self):
-        hostapd = Hostapd('wlan0', 'test', 'Test', 3)
-        self.assertRaises(BindError, hostapd.parse_hostapd_output, HOSTAPD_OUTPUT_FAILURE)
 
 
 DNSMASQ_FILE_1 = """interface=wlan0

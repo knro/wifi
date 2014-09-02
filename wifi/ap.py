@@ -99,9 +99,8 @@ class Hostapd(object):
             self._logger.warn("Could not delete %s: %s" % (self.configfile, e))
 
     def activate(self):
-        hostapd_output = subprocess.check_output([self.__class__.hostapd, "-dd", "-B", self.configfile], stderr=subprocess.STDOUT)
-        hostapd_output = hostapd_output.decode('utf-8')
-        return self.parse_hostapd_output(hostapd_output)
+        subprocess.check_call([self.__class__.hostapd, "-dd", "-B", self.configfile], stderr=subprocess.STDOUT)
+        return True
 
     def deactivate(self):
         pid = self.get_pid()
@@ -185,6 +184,7 @@ class Hostapd(object):
 
 
     def parse_hostapd_output(self, output):
+        print(output)
         matches = bound_ap_re.search(output)
         if matches:
             return True
