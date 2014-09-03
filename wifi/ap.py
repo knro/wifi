@@ -490,6 +490,14 @@ class AccessPoint(object):
     scheme_cls = Scheme
 
     @classmethod
+    def for_classes(cls, hostapd_cls=None, dnsmasq_cls=None, scheme_cls=None):
+        return type(cls)(cls.__name__, (cls,), {
+            'hostapd_cls': hostapd_cls if hostapd_cls is not None else cls.hostapd_cls,
+            'dnsmasq_cls': dnsmasq_cls if dnsmasq_cls is not None else cls.dnsmasq_cls,
+            'scheme_cls': scheme_cls if scheme_cls is not None else cls.scheme_cls
+        })
+
+    @classmethod
     def all(cls):
         hostapds = {(hostapd.interface, hostapd.name): hostapd for hostapd in cls.hostapd_cls.all()}
         dnsmasqs = {(dnsmasq.interface, dnsmasq.name): dnsmasq for dnsmasq in cls.dnsmasq_cls.all()}
