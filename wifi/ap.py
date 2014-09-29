@@ -679,16 +679,16 @@ class AccessPoint(object):
     def activate(self):
         """ Activates the access point by activating all wrapped configurations. """
 
-        self.scheme.activate()
         self.hostapd.activate()
+        self.scheme.activate()
         self.dnsmasq.activate()
 
     def deactivate(self):
         """ Deactivates the access point by deactivating all wrapped configurations. """
 
         self.dnsmasq.deactivate()
-        self.hostapd.deactivate()
         self.scheme.deactivate()
+        self.hostapd.deactivate()
 
     @property
     def name(self):
