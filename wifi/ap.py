@@ -99,8 +99,13 @@ class Hostapd(object):
             self._logger.warn("Could not delete %s: %s" % (self.configfile, e))
 
     def activate(self):
-        subprocess.check_call([self.__class__.hostapd, "-dd", "-B", self.configfile], stderr=subprocess.STDOUT)
-        return True
+        try:
+            output = subprocess.check_output([self.__class__.hostapd, "-dd", "-B", self.configfile], stderr=subprocess.STDOUT)
+            self._logger.info("Started hostapd: {output}".format(output=output))
+            return True
+        except subprocess.CalledProcessError as e:
+            self._logger.warn("Error while starting hostapd: {output}".format(output=e.output))
+            raise e
 
     def deactivate(self):
         pid = self.get_pid()
@@ -436,7 +441,12 @@ class Dnsmasq(object):
     def activate(self):
         """ Activates this config. """
 
-        subprocess.check_call([self.__class__.dnsmasq, "--conf-file={file}".format(file=self.configfile)])
+        try:
+            output = subprocess.check_output([self.__class__.dnsmasq, "--conf-file={file}".format(file=self.configfile)], stderr=subprocess.STDOUT)
+            self._logger.info("Started dnsmasq: {output}".format(output=output))
+        except subprocess.CalledProcessError as e:
+            self._logger.warn("Error while starting dnsmasq: {output}".format(output=e.output))
+            raise e
 
     def deactivate(self):
         """ Deactivates this config. """
