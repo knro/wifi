@@ -1,5 +1,6 @@
 import re
 import itertools
+import logging
 
 import wifi.subprocess_compat as subprocess
 from pbkdf2 import PBKDF2
@@ -70,6 +71,8 @@ class Scheme(object):
                 if not isinstance(v, (list, tuple)):
                     options[k] = [v]
         self.options = options or {}
+
+        self.logger = logging.getLogger(__name__)
 
     def __str__(self):
         """
@@ -163,7 +166,11 @@ class Scheme(object):
         """
 
         self.deactivate()
-        ifup_output = subprocess.check_output(['/sbin/ifup'] + self.as_args(), stderr=subprocess.STDOUT)
+        try:
+            ifup_output = subprocess.check_output(['/sbin/ifup'] + self.as_args(), stderr=subprocess.STDOUT)
+        except subprocess.CalledProcessError as e:
+            self.logger.exception("Failed to connect to %r" % self)
+            raise ConnectionError("Failed to connect to %r: %s" % (self, e.message))
         ifup_output = ifup_output.decode('utf-8')
 
         return self.parse_ifup_output(ifup_output)
