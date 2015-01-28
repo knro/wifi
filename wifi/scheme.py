@@ -170,6 +170,7 @@ class Scheme(object):
             ifup_output = subprocess.check_output(['/sbin/ifup'] + self.as_args(), stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
             self.logger.exception("Failed to connect to %r" % self)
+            self.logger.error("Output: %s" % e.output)
             raise ConnectionError("Failed to connect to %r: %s" % (self, e.message))
         ifup_output = ifup_output.decode('utf-8')
 
