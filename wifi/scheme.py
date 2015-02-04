@@ -5,7 +5,7 @@ import logging
 import wifi.subprocess_compat as subprocess
 from pbkdf2 import PBKDF2
 from wifi.utils import ensure_file_exists
-from wifi.exceptions import ConnectionError, InterfaceError
+from wifi.exceptions import *
 
 
 def configuration(cell, passkey=None):
