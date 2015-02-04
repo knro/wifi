@@ -1,10 +1,13 @@
-class ConnectionError(Exception):
+class WifiError(Exception):
+    pass
+
+class ConnectionError(WifiError):
     pass
 
 
-class InterfaceError(Exception):
+class InterfaceError(WifiError):
     pass
 
 
-class BindError(Exception):
+class BindError(WifiError):
     pass

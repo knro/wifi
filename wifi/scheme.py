@@ -5,7 +5,7 @@ import logging
 import wifi.subprocess_compat as subprocess
 from pbkdf2 import PBKDF2
 from wifi.utils import ensure_file_exists
-from wifi.exceptions import ConnectionError
+from wifi.exceptions import ConnectionError, InterfaceError
 
 
 def configuration(cell, passkey=None):
@@ -169,9 +169,9 @@ class Scheme(object):
         try:
             ifup_output = subprocess.check_output(['/sbin/ifup'] + self.as_args(), stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as e:
-            self.logger.exception("Failed to connect to %r" % self)
+            self.logger.exception("Error while trying to connect to %s" % self.iface)
             self.logger.error("Output: %s" % e.output)
-            raise ConnectionError("Failed to connect to %r: %s" % (self, e.message))
+            raise InterfaceError("Failed to connect to %r: %s" % (self, e.message))
         ifup_output = ifup_output.decode('utf-8')
 
         return self.parse_ifup_output(ifup_output)
