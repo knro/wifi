@@ -32,7 +32,7 @@ def configuration(cell, passkey=None):
         elif cell.encryption_type == 'wep':
             return {
                 'wireless-essid': cell.ssid,
-                'wireless-key': passkey,
+                'wireless-key': 's:' + passkey,
             }
         else:
             raise NotImplementedError

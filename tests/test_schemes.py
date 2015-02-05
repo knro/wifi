@@ -122,8 +122,8 @@ class TestForCell(TestCase):
         scheme = Scheme.for_cell('wlan0', 'test', cell, 'passkey')
 
         self.assertEqual(scheme.options, {
-            'wireless-essid': ['SSID'],
-            'wireless-key': ['passkey'],
+            'wireless-essid': 'SSID',
+            'wireless-key': 's:passkey',
         })
 
     def test_wpa2(self):
