@@ -123,7 +123,7 @@ class TestForCell(TestCase):
 
         self.assertEqual(scheme.options, {
             'wireless-essid': 'SSID',
-            'wireless-key': 'passkey',
+            'wireless-key': 's:passkey',
         })
 
     def test_wpa2(self):
