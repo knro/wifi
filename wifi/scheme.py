@@ -169,7 +169,7 @@ class Scheme(object):
         Connects to the network as configured in this scheme.
         """
 
-        subprocess.check_output(['/sbin/ifdown', self.interface], stderr=subprocess.STDOUT)
+        subprocess.check_output(['/sbin/ifdown', self.iface], stderr=subprocess.STDOUT)
         ifup_output = subprocess.check_output(['/sbin/ifup'] + self.as_args(), stderr=subprocess.STDOUT)
         ifup_output = ifup_output.decode('utf-8')
 
