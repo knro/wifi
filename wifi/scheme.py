@@ -1,11 +1,23 @@
 import re
 import itertools
 import logging
+import socket
+import fcntl
+import struct
 
 import wifi.subprocess_compat as subprocess
 from pbkdf2 import PBKDF2
 from wifi.utils import ensure_file_exists
 from wifi.exceptions import *
+
+
+def get_ip_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    return socket.inet_ntoa(fcntl.ioctl(
+        s.fileno(),
+        0x8915,  # SIOCGIFADDR
+        struct.pack('256s', ifname[:15])
+    )[20:24])
 
 
 def configuration(cell, passkey=None):
@@ -206,6 +218,8 @@ class Scheme(object):
             matches = bound_ip_re.search(output)
             if matches:
                 return Connection(scheme=self, ip_address=matches.group('ip_address'))
+            elif "already configured" in output:
+                return Connection(scheme=self, ip_address=get_ip_address(self.iface))
             else:
                 raise ConnectionError("Failed to connect to %r" % self)
         else:
