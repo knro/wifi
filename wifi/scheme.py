@@ -219,7 +219,7 @@ class Scheme(object):
             if matches:
                 return Connection(scheme=self, ip_address=matches.group('ip_address'))
             elif "already configured" in output:
-                return Connection(scheme=self, ip_address=get_ip_address(self.iface))
+                return Connection(scheme=self, ip_address=get_ip_address(self.interface))
             else:
                 raise ConnectionError("Failed to connect to %r" % self)
         else:
